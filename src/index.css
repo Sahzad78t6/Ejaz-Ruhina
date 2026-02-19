@@ -1,0 +1,90 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #faf6f0;
+  --ivory: #f5efe6;
+  --gold: #c9a84c;
+  --gold-light: #e8c96d;
+  --gold-dark: #a07830;
+  --gold-glow: rgba(201, 168, 76, 0.4);
+  --sage: #7a9e7e;
+  --sage-light: #a8c5ac;
+  --sage-dark: #4a6b4e;
+  --text-dark: #2c2416;
+  --text-medium: #5a4a32;
+  --text-light: #8a7a62;
+  --deep: #1a1208;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background: var(--deep);
+  color: var(--cream);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+.shimmer-gold {
+  background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold-light) 40%, #fff8e0 50%, var(--gold-light) 60%, var(--gold-dark) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+.shimmer-white {
+  background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,1) 40%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,1) 60%, rgba(255,255,255,0.5) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 5s linear infinite;
+}
+
+@keyframes shimmer { to { background-position: 200% center; } }
+
+.glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 24px;
+}
+
+.glass-light {
+  background: rgba(255,248,230,0.08);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 20px;
+}
+
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes floatSlow { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-18px) rotate(3deg)} }
+@keyframes glowPulse { 0%,100%{box-shadow:0 0 20px var(--gold-glow)} 50%{box-shadow:0 0 60px var(--gold-glow), 0 0 120px rgba(201,168,76,0.15)} }
+@keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes heartbeat { 0%,100%{transform:scale(1)} 14%{transform:scale(1.2)} 28%{transform:scale(1)} 42%{transform:scale(1.15)} 70%{transform:scale(1)} }
+@keyframes textReveal { from{clip-path:inset(0 100% 0 0)} to{clip-path:inset(0 0% 0 0)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes sideFlowLeft { 0%{transform:translateX(-120px) translateY(0) rotate(0deg);opacity:0} 10%{opacity:0.7} 90%{opacity:0.4} 100%{transform:translateX(calc(100vw + 120px)) translateY(var(--dy)) rotate(720deg);opacity:0} }
+@keyframes sideFlowRight { 0%{transform:translateX(calc(100vw + 120px)) translateY(0) rotate(0deg);opacity:0} 10%{opacity:0.7} 90%{opacity:0.4} 100%{transform:translateX(-120px) translateY(var(--dy)) rotate(-720deg);opacity:0} }
+@keyframes riseUp { 0%{transform:translateY(100vh) rotate(0deg);opacity:0} 10%{opacity:0.6} 80%{opacity:0.3} 100%{transform:translateY(-100px) rotate(360deg);opacity:0} }
+@keyframes auraPulse { 0%,100%{opacity:0.4;transform:scale(1) rotate(0deg)} 50%{opacity:0.7;transform:scale(1.1) rotate(180deg)} }
+
+/* Cursor */
+.cursor { position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:transform 0.05s; }
+.cursor-ring { position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,0.6);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:left 0.12s ease,top 0.12s ease; }
+
+/* Countdown */
+.cd-num { font-family:'Cinzel',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;line-height:1; }
+.cd-label { font-family:'Lato',sans-serif;font-size:0.6rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-light); }
+
+@media(max-width:768px) {
+  .cd-num { font-size:1.5rem; }
+}
