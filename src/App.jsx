@@ -857,34 +857,65 @@ function MusicBtn({ on, toggle }) {
 // ─── MAIN APPLICATION ────────────────────────────────
 export default function App() {
   const [entered, setEntered] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
   const mainRef = useRef()
   const synthRef = useRef(null)
+  const isPlayingRef = useRef(true)
+
+  // Keep ref in sync for event listeners
+  useEffect(() => {
+    isPlayingRef.current = isPlaying
+  }, [isPlaying])
 
   useEffect(() => {
     synthRef.current = new GentleAmbientSynth()
+
+    // Attempt autoplay immediately
+    if (isPlayingRef.current) {
+      try {
+        synthRef.current.play()
+      } catch (e) {
+        console.log("Autoplay waiting for interaction")
+      }
+    }
+
+    // Function to ensure audio starts on first user interaction if enabled
+    const startOnInteraction = () => {
+      if (isPlayingRef.current && synthRef.current) {
+        synthRef.current.play()
+      }
+    }
+
+    window.addEventListener('click', startOnInteraction, { once: true })
+    window.addEventListener('touchstart', startOnInteraction, { once: true })
+    window.addEventListener('scroll', startOnInteraction, { once: true })
+    window.addEventListener('keydown', startOnInteraction, { once: true })
+
     return () => {
+      window.removeEventListener('click', startOnInteraction)
+      window.removeEventListener('touchstart', startOnInteraction)
+      window.removeEventListener('scroll', startOnInteraction)
+      window.removeEventListener('keydown', startOnInteraction)
       if (synthRef.current) synthRef.current.stop()
     }
   }, [])
 
   const toggleMusic = () => {
     if (!synthRef.current) return
-    if (!isPlaying) {
-      synthRef.current.play()
-      setIsPlaying(true)
-    } else {
+    if (isPlaying) {
       synthRef.current.pause()
       setIsPlaying(false)
+    } else {
+      synthRef.current.play()
+      setIsPlaying(true)
     }
   }
 
   const handleEnter = () => {
     setEntered(true)
     setTimeout(() => mainRef.current?.scrollIntoView({ behavior: 'smooth' }), 200)
-    if (!isPlaying && synthRef.current) {
+    if (isPlaying && synthRef.current) {
       synthRef.current.play()
-      setIsPlaying(true)
     }
   }
 
