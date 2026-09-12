@@ -11,7 +11,7 @@ import CountdownTimer from './components/CountdownTimer'
 import { GoldDivider, IslamicCorner, IslamicEmblem } from './components/Decorative'
 import confetti from 'canvas-confetti'
 import { weddingConfig } from './weddingConfig'
-import { GentleAmbientSynth } from './components/AmbientAudio'
+import weddingSong from './wedding-song.mp3'
 
 // ─── In-view wrapper ───────────────────────────────────
 function InView({ children, delay = 0, style }) {
@@ -859,7 +859,7 @@ export default function App() {
   const [entered, setEntered] = useState(false)
   const [isPlaying, setIsPlaying] = useState(true)
   const mainRef = useRef()
-  const synthRef = useRef(null)
+  const audioRef = useRef(null)
   const isPlayingRef = useRef(true)
 
   // Keep ref in sync for event listeners
@@ -868,21 +868,21 @@ export default function App() {
   }, [isPlaying])
 
   useEffect(() => {
-    synthRef.current = new GentleAmbientSynth()
+    audioRef.current = new Audio(weddingSong)
+    audioRef.current.loop = true
+    audioRef.current.volume = 0.65
 
     // Attempt autoplay immediately
     if (isPlayingRef.current) {
-      try {
-        synthRef.current.play()
-      } catch (e) {
+      audioRef.current.play().catch(e => {
         console.log("Autoplay waiting for interaction")
-      }
+      })
     }
 
     // Function to ensure audio starts on first user interaction if enabled
     const startOnInteraction = () => {
-      if (isPlayingRef.current && synthRef.current) {
-        synthRef.current.play()
+      if (isPlayingRef.current && audioRef.current) {
+        audioRef.current.play().catch(e => console.log("Play failed:", e))
       }
     }
 
@@ -896,17 +896,17 @@ export default function App() {
       window.removeEventListener('touchstart', startOnInteraction)
       window.removeEventListener('scroll', startOnInteraction)
       window.removeEventListener('keydown', startOnInteraction)
-      if (synthRef.current) synthRef.current.stop()
+      if (audioRef.current) audioRef.current.pause()
     }
   }, [])
 
   const toggleMusic = () => {
-    if (!synthRef.current) return
+    if (!audioRef.current) return
     if (isPlaying) {
-      synthRef.current.pause()
+      audioRef.current.pause()
       setIsPlaying(false)
     } else {
-      synthRef.current.play()
+      audioRef.current.play().catch(e => console.log("Play failed:", e))
       setIsPlaying(true)
     }
   }
@@ -914,8 +914,8 @@ export default function App() {
   const handleEnter = () => {
     setEntered(true)
     setTimeout(() => mainRef.current?.scrollIntoView({ behavior: 'smooth' }), 200)
-    if (isPlaying && synthRef.current) {
-      synthRef.current.play()
+    if (isPlaying && audioRef.current) {
+      audioRef.current.play().catch(e => console.log("Play failed:", e))
     }
   }
 
