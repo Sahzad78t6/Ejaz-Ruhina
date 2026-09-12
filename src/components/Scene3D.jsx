@@ -3,14 +3,14 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { AdaptiveDpr } from '@react-three/drei'
 import * as THREE from 'three'
 
-function FloralMandala() {
+function IslamicMandala() {
   const group = useRef()
   const rings = useRef([])
 
   const ringData = useMemo(() => [
     { radius: 2.0, tube: 0.025, color: '#c9a84c', speed: 0.25, axis: [1, 0, 0] },
     { radius: 2.0, tube: 0.025, color: '#e8c96d', speed: -0.18, axis: [0, 1, 0] },
-    { radius: 2.0, tube: 0.025, color: '#a8c5ac', speed: 0.32, axis: [0.7, 0.7, 0] },
+    { radius: 2.0, tube: 0.025, color: '#2d9f67', speed: 0.32, axis: [0.7, 0.7, 0] },
     { radius: 2.8, tube: 0.018, color: '#c9a84c', speed: -0.15, axis: [0, 0, 1] },
     { radius: 2.8, tube: 0.018, color: '#fff8e0', speed: 0.20, axis: [0.5, 0.5, 0.7] },
     { radius: 1.3, tube: 0.03, color: '#e8c96d', speed: -0.40, axis: [0, 1, 0] },
@@ -21,14 +21,16 @@ function FloralMandala() {
     radius: 1.8,
     speed: 0.2 + Math.random() * 0.15,
     size: 0.04 + Math.random() * 0.06,
-    color: ['#c9a84c', '#e8c96d', '#a8c5ac', '#fff8e0'][i % 4],
+    color: ['#c9a84c', '#e8c96d', '#2d9f67', '#fff8e0'][i % 4],
     offset: Math.random() * Math.PI * 2,
   })), [])
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime()
-    group.current.rotation.y = t * 0.08
-    group.current.position.y = Math.sin(t * 0.4) * 0.15
+    if (group.current) {
+      group.current.rotation.y = t * 0.08
+      group.current.position.y = Math.sin(t * 0.4) * 0.15
+    }
 
     rings.current.forEach((mesh, i) => {
       if (!mesh) return
@@ -48,21 +50,21 @@ function FloralMandala() {
         </mesh>
       ))}
 
-      {/* Floating orbs */}
+      {/* Floating light orbs */}
       {orbs.map((orb, i) => (
         <OrbMesh key={i} orb={orb} />
       ))}
 
-      {/* Center gem */}
+      {/* Faceted gold & emerald center gem */}
       <mesh>
-        <octahedronGeometry args={[0.25, 0]} />
-        <meshStandardMaterial color="#e8c96d" metalness={1} roughness={0} emissive="#c9a84c" emissiveIntensity={1.5} />
+        <octahedronGeometry args={[0.26, 0]} />
+        <meshStandardMaterial color="#e8c96d" metalness={1} roughness={0} emissive="#c9a84c" emissiveIntensity={1.6} />
       </mesh>
 
-      {/* Inner glow sphere */}
+      {/* Inner emerald-gold glow sphere */}
       <mesh>
         <sphereGeometry args={[0.18, 32, 32]} />
-        <meshStandardMaterial color="#fff8e0" transparent opacity={0.3} emissive="#c9a84c" emissiveIntensity={2} />
+        <meshStandardMaterial color="#2d9f67" transparent opacity={0.35} emissive="#1b7a4e" emissiveIntensity={2} />
       </mesh>
     </group>
   )
@@ -72,10 +74,12 @@ function OrbMesh({ orb }) {
   const mesh = useRef()
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime()
-    mesh.current.position.x = Math.cos(orb.angle + t * orb.speed) * orb.radius
-    mesh.current.position.y = Math.sin(t * orb.speed * 0.5 + orb.offset) * 0.4
-    mesh.current.position.z = Math.sin(orb.angle + t * orb.speed) * orb.radius * 0.4
-    mesh.current.scale.setScalar(1 + Math.sin(t * 2 + orb.offset) * 0.15)
+    if (mesh.current) {
+      mesh.current.position.x = Math.cos(orb.angle + t * orb.speed) * orb.radius
+      mesh.current.position.y = Math.sin(t * orb.speed * 0.5 + orb.offset) * 0.4
+      mesh.current.position.z = Math.sin(orb.angle + t * orb.speed) * orb.radius * 0.4
+      mesh.current.scale.setScalar(1 + Math.sin(t * 2 + orb.offset) * 0.15)
+    }
   })
   return (
     <mesh ref={mesh}>
@@ -85,7 +89,7 @@ function OrbMesh({ orb }) {
   )
 }
 
-function VolumetricParticles({ count = 300 }) {
+function VolumetricParticles({ count = 250 }) {
   const mesh = useRef()
   const dummy = useMemo(() => new THREE.Object3D(), [])
 
@@ -96,12 +100,13 @@ function VolumetricParticles({ count = 300 }) {
     speed: (Math.random() - 0.5) * 0.004,
     phiSpeed: (Math.random() - 0.5) * 0.003,
     size: 0.015 + Math.random() * 0.04,
-    color: new THREE.Color(['#c9a84c', '#e8c96d', '#a8c5ac', '#fff8e0', '#d4af60'][Math.floor(Math.random() * 5)]),
+    color: new THREE.Color(['#c9a84c', '#e8c96d', '#2d9f67', '#fff8e0', '#d4af60'][Math.floor(Math.random() * 5)]),
     offset: Math.random() * Math.PI * 2,
   })), [count])
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime()
+    if (!mesh.current) return
     data.forEach((p, i) => {
       p.theta += p.speed + Math.sin(t * 0.2 + p.offset) * 0.002
       p.phi += p.phiSpeed
@@ -128,11 +133,11 @@ function VolumetricParticles({ count = 300 }) {
   )
 }
 
-function PetalStream({ count = 40 }) {
+function GoldDustStream({ count = 35 }) {
   const mesh = useRef()
   const dummy = useMemo(() => new THREE.Object3D(), [])
 
-  const petals = useMemo(() => Array.from({ length: count }, (_, i) => ({
+  const particles = useMemo(() => Array.from({ length: count }, (_, i) => ({
     x: (Math.random() - 0.5) * 12,
     y: -5 + Math.random() * 12,
     z: (Math.random() - 0.5) * 5,
@@ -141,12 +146,13 @@ function PetalStream({ count = 40 }) {
     drift: (Math.random() - 0.5) * 0.01,
     offset: Math.random() * Math.PI * 2,
     waveAmp: 0.5 + Math.random() * 1.5,
-    color: new THREE.Color(['#c9a84c', '#e8c96d', '#a8c5ac', '#d4af60'][i % 4])
+    color: new THREE.Color(['#c9a84c', '#e8c96d', '#2d9f67', '#fff8e0', '#d4af60'][i % 5])
   })), [count])
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime()
-    petals.forEach((p, i) => {
+    if (!mesh.current) return
+    particles.forEach((p, i) => {
       p.y += p.speed
       p.x += p.drift + Math.sin(t + p.offset) * 0.005
       if (p.y > 6) { p.y = -5; p.x = (Math.random() - 0.5) * 12 }
@@ -154,7 +160,7 @@ function PetalStream({ count = 40 }) {
       dummy.position.set(p.x + Math.sin(t * 0.5 + p.offset) * p.waveAmp * 0.3, p.y, p.z)
       dummy.rotation.z = t * p.spin + p.offset
       dummy.rotation.x = Math.sin(t * 0.3 + p.offset) * 0.5
-      dummy.scale.setScalar(0.08 + Math.sin(t + p.offset) * 0.02)
+      dummy.scale.setScalar(0.06 + Math.sin(t + p.offset) * 0.02)
       dummy.updateMatrix()
       mesh.current.setMatrixAt(i, dummy.matrix)
       if (mesh.current.instanceColor) mesh.current.setColorAt(i, p.color)
@@ -165,8 +171,8 @@ function PetalStream({ count = 40 }) {
 
   return (
     <instancedMesh ref={mesh} args={[null, null, count]}>
-      <planeGeometry args={[1, 1.3]} />
-      <meshStandardMaterial transparent opacity={0.7} side={THREE.DoubleSide} emissive="#c9a84c" emissiveIntensity={0.3} />
+      <circleGeometry args={[0.5, 6]} />
+      <meshStandardMaterial transparent opacity={0.75} side={THREE.DoubleSide} emissive="#c9a84c" emissiveIntensity={0.5} />
     </instancedMesh>
   )
 }
@@ -189,11 +195,11 @@ function Lights() {
 
   return (
     <>
-      <ambientLight intensity={0.3} color="#fff4e0" />
+      <ambientLight intensity={0.35} color="#fff4e0" />
       <pointLight position={[0, 0, 3]} intensity={3} color="#c9a84c" distance={10} />
       <spotLight ref={spot1} position={[5, 5, 5]} angle={0.3} penumbra={0.8} intensity={4} color="#e8c96d" castShadow={false} />
-      <spotLight ref={spot2} position={[-5, 3, 5]} angle={0.3} penumbra={0.8} intensity={3} color="#a8c5ac" />
-      <pointLight position={[0, -3, 2]} intensity={2} color="#7a9e7e" distance={8} />
+      <spotLight ref={spot2} position={[-5, 3, 5]} angle={0.3} penumbra={0.8} intensity={3} color="#2d9f67" />
+      <pointLight position={[0, -3, 2]} intensity={2} color="#1b7a4e" distance={8} />
       <pointLight position={[3, 2, -2]} intensity={1.5} color="#fff8e0" distance={6} />
     </>
   )
@@ -209,9 +215,9 @@ export default function Scene3D() {
     >
       <AdaptiveDpr pixelated />
       <Lights />
-      <FloralMandala />
+      <IslamicMandala />
       <VolumetricParticles count={250} />
-      <PetalStream count={35} />
+      <GoldDustStream count={35} />
     </Canvas>
   )
 }

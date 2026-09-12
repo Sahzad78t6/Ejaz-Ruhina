@@ -18,7 +18,7 @@ export default function SplashCursor() {
     resize()
     window.addEventListener('resize', resize)
 
-    const COLORS = ['#c9a84c', '#e8c96d', '#a8c5ac', '#fff8e0', '#d4af60']
+    const COLORS = ['#c9a84c', '#e8c96d', '#2d9f67', '#1b7a4e', '#fff8e0']
 
     const onMouseMove = (e) => {
       mouse.current.px = mouse.current.x

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 export default function Particles({
   count = 120,
-  particleColors = ['#c9a84c', '#e8c96d', '#a8c5ac', '#ffffff'],
+  particleColors = ['#c9a84c', '#e8c96d', '#2d9f67', '#1b7a4e', '#ffffff'],
   minSize = 1,
   maxSize = 4,
   speed = 0.5,

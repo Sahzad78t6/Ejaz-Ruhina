@@ -7,13 +7,17 @@
   --gold-light: #e8c96d;
   --gold-dark: #a07830;
   --gold-glow: rgba(201, 168, 76, 0.4);
-  --sage: #7a9e7e;
-  --sage-light: #a8c5ac;
-  --sage-dark: #4a6b4e;
+  --emerald: #1b7a4e;
+  --emerald-light: #2d9f67;
+  --emerald-dark: #0b4f3d;
+  --emerald-glow: rgba(27, 122, 78, 0.4);
+  --sage: #1b7a4e;
+  --sage-light: #2d9f67;
+  --sage-dark: #0b4f3d;
   --text-dark: #2c2416;
   --text-medium: #5a4a32;
   --text-light: #8a7a62;
-  --deep: #1a1208;
+  --deep: #0a0d0b;
 }
 
 html { scroll-behavior: smooth; }
@@ -23,7 +27,17 @@ body {
   background: var(--deep);
   color: var(--cream);
   overflow-x: hidden;
-  cursor: none;
+  cursor: default;
+}
+
+.arabic-font {
+  font-family: 'Amiri', Georgia, serif;
+  direction: rtl;
+  unicode-bidi: embed;
+}
+
+.script-font {
+  font-family: 'Alex Brush', 'Great Vibes', cursive;
 }
 
 ::-webkit-scrollbar { width: 3px; }

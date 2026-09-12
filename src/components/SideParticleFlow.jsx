@@ -16,8 +16,8 @@ export default function SideParticleFlow({ style }) {
     resize()
     window.addEventListener('resize', resize)
 
-    const SHAPES = ['petal', 'star', 'circle', 'diamond']
-    const COLORS = ['#c9a84c', '#e8c96d', '#a8c5ac', '#fff8e0', '#d4af60', '#b8d4bb']
+    const SHAPES = ['crescent', 'star', 'circle', 'diamond']
+    const COLORS = ['#c9a84c', '#e8c96d', '#2d9f67', '#fff8e0', '#d4af60', '#1b7a4e']
 
     const spawn = () => {
       const fromLeft = Math.random() > 0.5
@@ -29,7 +29,7 @@ export default function SideParticleFlow({ style }) {
         vy: (Math.random() - 0.5) * 1.5,
         spin: (Math.random() - 0.5) * 0.08,
         angle: Math.random() * Math.PI * 2,
-        size: 4 + Math.random() * 14,
+        size: 4 + Math.random() * 12,
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
         shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
         alpha: 0,
@@ -42,14 +42,11 @@ export default function SideParticleFlow({ style }) {
       })
     }
 
-    const drawPetal = (ctx, size) => {
-      ctx.save()
+    const drawCrescent = (ctx, size) => {
       ctx.beginPath()
-      ctx.moveTo(0, -size)
-      ctx.bezierCurveTo(size * 0.6, -size * 0.5, size * 0.6, size * 0.5, 0, size)
-      ctx.bezierCurveTo(-size * 0.6, size * 0.5, -size * 0.6, -size * 0.5, 0, -size)
+      ctx.arc(0, 0, size, 0.4, Math.PI * 1.6, false)
+      ctx.arc(size * 0.35, 0, size * 0.75, Math.PI * 1.4, 0.6, true)
       ctx.closePath()
-      ctx.restore()
     }
 
     const drawStar = (ctx, size, points = 5) => {
@@ -77,7 +74,6 @@ export default function SideParticleFlow({ style }) {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       frame++
 
-      // Spawn
       if (frame % 8 === 0 && particles.current.length < 60) spawn()
 
       particles.current = particles.current.filter(p => {
@@ -86,7 +82,6 @@ export default function SideParticleFlow({ style }) {
         p.x += p.vx + Math.sin(p.wave + p.life * p.waveFreq) * p.waveAmp * 0.3
         p.y += p.vy + Math.sin(p.wave + p.life * p.waveFreq * 1.5) * p.waveAmp
 
-        // Alpha fade in/out
         if (p.life < 30) p.alpha = p.life / 30
         else if (p.life > p.maxLife - 30) p.alpha = (p.maxLife - p.life) / 30
         else p.alpha = 0.7 + Math.sin(p.life * 0.05) * 0.3
@@ -102,15 +97,14 @@ export default function SideParticleFlow({ style }) {
         ctx.shadowBlur = p.size * 2
         ctx.shadowColor = p.color
 
-        if (p.shape === 'petal') drawPetal(ctx, p.size)
+        if (p.shape === 'crescent') drawCrescent(ctx, p.size)
         else if (p.shape === 'star') drawStar(ctx, p.size)
         else if (p.shape === 'diamond') drawDiamond(ctx, p.size)
         else { ctx.beginPath(); ctx.arc(0, 0, p.size * 0.7, 0, Math.PI * 2) }
 
         ctx.fill()
 
-        // Glint highlight
-        ctx.globalAlpha = p.alpha * 0.3
+        ctx.globalAlpha = p.alpha * 0.35
         ctx.fillStyle = '#fff'
         ctx.beginPath()
         ctx.arc(-p.size * 0.25, -p.size * 0.25, p.size * 0.2, 0, Math.PI * 2)
