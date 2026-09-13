@@ -69,8 +69,8 @@ export const weddingConfig = {
   },
 
   gallery: [
-    { id: 1, title: "Pure Elegance", desc: "A journey of two souls united in faith", image: null },
-    { id: 2, title: "Blissful Beginnings", desc: "Crafting beautiful memories together", image: null },
-    { id: 3, title: "Sacred Covenant", desc: "With love, prayers, and gratitude to Allah", image: null }
+    { id: 1, title: "Pure Elegance", desc: "A journey of two souls united in faith", image: "/photo1.jpg" },
+    { id: 2, title: "Blissful Beginnings", desc: "Crafting beautiful memories together", image: "/photo2.jpg" },
+    { id: 3, title: "Sacred Covenant", desc: "With love, prayers, and gratitude to Allah", image: "/photo3.jpg" }
   ]
 }
